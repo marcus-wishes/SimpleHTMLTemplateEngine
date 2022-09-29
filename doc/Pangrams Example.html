@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- saved from url=(0151)https://svn.volumeshop.org/svn/volumeshop/branches/qt5/src/plugins/editors/plugin_editor_statechangerecorder/src/SimpleTemplateEngine/doc/pangrams.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Pangrams Example</title>
+	<title>The quick brown fox jumps over the lazy dog.</title>
+</head>
+<body>
+	<h0>About Pangrams:</h0><br>
+	The most known pangram is: The quick brown fox jumps over the lazy dog.<br>
+	<br>
+	The example used in the documentation:<br>
+	The quick brown <strong>fox</strong> jumps over the lazy <strong>dog</strong>.<br>
+	<br>
+	<br>
+	Lets make a list of english pangrams:<br>
+	<br>
+		0: Sphinx of black quartz judge my vow. <br>
+		1: A quick movement of the enemy will jeopardize six gunboats. <br>
+		2: Five quacking Zephyrs jolt my wax bed. <br>
+		3: Heavy boxes perform waltzes and jigs. <br>
+	<br>
+	<br>
+	Is "the quick brown fox jumps over the lazy dog" a pangram?
+		Yes, it is.
+	<br>
+	<br>
+	Using switch we choose one:<br>
+	<br>
+		The five boxing wizards jump quickly.
+	<br>
+	<br>
+	Each pangram 3 times, this is done by using a vector with any values and not using the ##valueX## keyword in the inner loop.<br>
+	<br>
+			Sphinx of black quartz judge my vow. <br>
+			Sphinx of black quartz judge my vow. <br>
+			Sphinx of black quartz judge my vow. <br>
+		<br>
+			A quick movement of the enemy will jeopardize six gunboats. <br>
+			A quick movement of the enemy will jeopardize six gunboats. <br>
+			A quick movement of the enemy will jeopardize six gunboats. <br>
+		<br>
+			Five quacking Zephyrs jolt my wax bed. <br>
+			Five quacking Zephyrs jolt my wax bed. <br>
+			Five quacking Zephyrs jolt my wax bed. <br>
+		<br>
+			Heavy boxes perform waltzes and jigs. <br>
+			Heavy boxes perform waltzes and jigs. <br>
+			Heavy boxes perform waltzes and jigs. <br>
+		<br>
+	<br>
+	<br>
+	Parameters:
+	<br>
+	An example for overwriting the data dictionary, or the use of default parameters for loops:<br>
+	<br>
+		blab
+		blub
+		blib
+		blob
+	<br>
+	A example for nested elements, at the loop the inner subsection which contains the swich is newly evaluated every iteration. In this evaluation the default value for the switch is newly set with the current ##value0##.
+	At the end there should be a list of all pangrams again:<br>
+	<br>
+			The five boxing wizards jump quickly.
+			A quick movement of the enemy will jeopardize six gunboats.
+			Sphinx of black quartz judge my vow.
+			This is the default case which is chosen when nothing was set.
+			Five quacking Zephyrs jolt my wax bed.
+	<br>
+	<br>
+	Now we do an example in which we not only access the original list, but also a the values of a second, third and fourth one (beware that the others one needs to be at least of the same length as the normally used one, else the accessor will be not replaced).<br>
+	Colors, numbers and multiList are overwritten value lists in the parameters, while the pangramlist is again the original one.<br>
+	<br>
+			first: green? a frog - Sphinx of black quartz judge my vow.
+			first: green? a frog - Sphinx of black quartz judge my vow.
+			first: green? a frog - Sphinx of black quartz judge my vow.
+			second: blue? a elephant - A quick movement of the enemy will jeopardize six gunboats.
+			second: blue? a elephant - A quick movement of the enemy will jeopardize six gunboats.
+			second: blue? a elephant - A quick movement of the enemy will jeopardize six gunboats.
+			third: black? a gorilla - Five quacking Zephyrs jolt my wax bed.
+			third: black? a gorilla - Five quacking Zephyrs jolt my wax bed.
+			third: black? a gorilla - Five quacking Zephyrs jolt my wax bed.
+	<br>
+			first: green?  - Sphinx of black quartz judge my vow.
+			second: blue?  - A quick movement of the enemy will jeopardize six gunboats.
+			third: black?  - Five quacking Zephyrs jolt my wax bed.
+			first: green?  - Sphinx of black quartz judge my vow.
+			second: blue?  - A quick movement of the enemy will jeopardize six gunboats.
+			third: black?  - Five quacking Zephyrs jolt my wax bed.
+			first: green?  - Sphinx of black quartz judge my vow.
+			second: blue?  - A quick movement of the enemy will jeopardize six gunboats.
+			third: black?  - Five quacking Zephyrs jolt my wax bed.
+	<br>
+	At last we test this also for if/else:
+			This is the true part.
+			This is the true part.
+			This is the false part.
+			This is the false part.
+	<br>
+	<br>
+	For really advance usages - a custom function example (with a german pangram):<br>
+	<br>
+Content handled by customExampleFunction: Pangrams Example: 		Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert. Pangrams Example
+
+</body></html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+	<title>{{most known pangram}}</title>
+</head>
+<body>
+	<h0>About Pangrams:</h0><br>
+	The most known pangram is: {{most known pangram}}<br>
+	<br>
+	The example used in the documentation:<br>
+	The quick brown <strong>{{animal1}}</strong> jumps over the lazy <strong>{{animal2}}</strong>.<br>
+	<br>
+	<br>
+	Lets make a list of english pangrams:<br>
+	<br>
+	**pangramlist
+		##counter0##: ##value0## <br>
+	**/
+	<br>
+	<br>
+	Is "the quick brown fox jumps over the lazy dog" a pangram?
+	<<isPangram
+		Yes, it is.
+	||
+		No, not a pangram.
+	<</
+	<br>
+	<br>
+	Using switch we choose one:<br>
+	<br>
+	>>choosePangram
+	||first
+		The five boxing wizards jump quickly.
+	||second
+		A quick movement of the enemy will jeopardize six gunboats.
+	||third
+		Sphinx of black quartz judge my vow.
+	||fourth
+		Five quacking Zephyrs jolt my wax bed.
+	||default
+		This is the default case which is chosen when nothing was set.
+	>>/
+	<br>
+	<br>
+	Each pangram 3 times, this is done by using a vector with any values and not using the ##valueX## keyword in the inner loop.<br>
+	<br>
+	**pangramlist
+		**empty
+			##value0## <br>
+		**/
+		<br>
+	**/
+	<br>
+	<br>
+	Parameters:
+	<br>
+	An example for overwriting the data dictionary, or the use of default parameters for loops:<br>
+	<br>
+	**paramlist [paramlist=blab,blub,blib,blob]
+		##value0##
+	**/
+	<br>
+	A example for nested elements, at the loop the inner subsection which contains the swich is newly evaluated every iteration. In this evaluation the default value for the switch is newly set with the current ##value0##.
+	At the end there should be a list of all pangrams again:<br>
+	<br>
+	**paramsTest [paramsTest=first,second,third,default,fourth; repeatParsing=true]
+		>>choosePangram [choosePangram=##value0##]
+		||first
+			The five boxing wizards jump quickly.
+		||second
+			A quick movement of the enemy will jeopardize six gunboats.
+		||third
+			Sphinx of black quartz judge my vow.
+		||fourth
+			Five quacking Zephyrs jolt my wax bed.
+		||default
+			This is the default case which is chosen when nothing was set.
+		>>/
+	**/
+	<br>
+	<br>
+	Now we do an example in which we not only access the original list, but also a the values of a second, third and fourth one (beware that the others one needs to be at least of the same length as the normally used one, else the accessor will be not replaced).<br>
+	Colors, numbers and multiList are overwritten value lists in the parameters, while the pangramlist is again the original one.<br>
+	<br>
+	**multilist [additionalLists=colors,numbers,pangramlist; multilist=a frog,a elephant,a gorilla; colors=green,blue,black; numbers=first,second,third,fourth]
+		**empty
+			##numbers##: ##colors##? ##value0## - ##pangramlist##
+		**/
+	**/
+	<br>
+	**empty
+		**multilist [additionalLists=colors,numbers,pangramlist; multilist=a frog,a elephant,a gorilla; colors=green,blue,black; numbers=first,second,third,fourth]
+			##numbers##: ##colors##? ##value0## - ##pangramlist##
+		**/
+	**/
+	<br>
+	At last we test this also for if/else:
+	**paramsTest [paramsTest=true,true,false,false; repeatParsing=true]
+		<<ifElseTest [ifElseTest=##value0##]
+			This is the true part.
+		||
+			This is the false part.
+		<</
+	**/
+	<br>
+	<br>
+	For really advance usages - a custom function example (with a german pangram):<br>
+	<br>
+	!!customExampleFunction [customParameter=qwertz]
+		Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert. {{title}}
+	!!/
+</body>
+</html>

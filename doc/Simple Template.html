@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- saved from url=(0157)https://svn.volumeshop.org/svn/volumeshop/branches/qt5/src/plugins/editors/plugin_editor_statechangerecorder/src/SimpleTemplateEngine/doc/SimpleTemplate.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Simple Template</title>
+    <style>
+        .code{
+			background-color: aliceblue;
+			padding: 1rem;
+        }
+        .template{
+			background-color: beige;
+			padding: 1rem;	
+        }
+        h2, h3, h1{
+            font-family: sans-serif
+        }
+        h1{
+            text-align: center
+        }
+        #outer {
+            display: table;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+        }
+
+        #middle {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        #inner {
+            margin-left: auto;
+            margin-right: auto; 
+            width: 75%;
+        }
+    </style>
+</head>
+<body>
+    <div id="outer">
+        <div id="inner">
+            <div id="middle">
+                <div>
+                    <h1>Simple Template</h1>
+                </div>
+                <br>
+                <br>
+                <div style="background-color: blanchedalmond; padding: 1rem">
+                    <h2>Project Status:</h2>
+                    <br>
+                    Even though this project was used in production within another project, I don't consider it production ready.
+                </div>
+                <br>
+                <br>
+                <div id="ProjectIntro">
+                    <h2>Motivation:</h2>
+                    <br>
+                    The goal of this simple template engine is to offer basic, easy to use functionality without the overhead and additional dependencies compared to established projects. 
+					Although it originated with the focus on HTML, it can be used also in other textual contexts.
+                    <br>
+                    <br> 
+                    Available functionalities are:
+                    <br>
+                    <ul>
+                        <li>Variables that can be replaced by strings.</li>
+                        <li>Loops with an loop variable and a counter.</li>
+                        <li>if/else and switch to decide which of the provided content is used</li>
+                    </ul>
+                    <br>
+                    All these elements can be used nested with exception of the variable.<br>
+                    The parsing is using regular expression and therefor the performance and the compatibility of the project is dependent on the regex STL implementation. 
+					Boosts regex implementation should offer better performance but since one of the reasons of the project was to avoid additional dependencies, I decided for the STL implementation.
+                    <br>
+                    In regard of input and output of the template and the filled HTML the engine offers direct file in- and output or the use of strings. If there is a parsing error this element will remain in the filled template. The only exception to this is a switch element with a default case defined and the error would be that no case to use is provided by the user. Than the default case is used.
+                    <br>
+					I explain the usage of this simple template engine in this document using examples.
+					The resulting template file as well as the resulted filled output file is found at the end of the document.
+                </div>
+                <br>
+                <br>
+                <div id="Usage">
+                    <h2>Usage:</h2>
+                    The library can handle text/html files directly as well as strings as template. Indentation are important to differentiate child elements and content, especially with nested elements. 
+					Loops, if/else and switch elements need to be in their own lines, while variables can be placed everywhere except as names of elements.
+                    <br>
+                    <p>Elements are build up as followed:</p>
+                    <ol>
+                        <li>an opening character sequence</li>
+                        <li>a sequence identification name for accessing the settings for this element</li>
+                        <li>(a separator character sequence in case of if/else and switch)</li>
+                        <li>(an accessor in case of loops)</li>
+                        <li>the content of the element</li>
+                        <li>a closing character sequence</li>
+                    </ol>
+                    <br>
+                    There will be always two parts within the examples of the elements. The first part is the one from the template document, while the second one is the C++ code part for this element.
+                    <br> 
+                    <br>
+                    <h3>Variables:</h3>
+                    Variables are identified using <code>{{variablename}}</code>. They can be replaced with any text content. If you want to use it to add additional template elements the template has to be parsed twice. 
+                    <br>
+                    <pre class="template">
+						<code>
+							The quick brown <b>{{animal}}</b> jumps over the lazy <b>{{animal2}}</b>.
+						</code>
+					</pre>
+                    To replace variables create a dictionary:
+					<pre class="code">
+						<code>
+							std::map&lt;std::string, std::string=""&gt; vars;
+							vars["animal"]  = "fox";
+							vars["animal2"] = "dog";
+						</code>
+					</pre>
+                    <br>
+                    <br>
+                    <h3>Loops:</h3>
+                    In this example we create a list of pangrams. The length of the list is defined in the corresponding C++ part as a vector.
+                    <br>
+                    In the template file, inside of the loop, there are two variables available for accessing the loop counter (<code>##counterX##</code>) and the value of the vector (<code>##valueX##</code>) at the counter. 
+					The X hereby stands for the number of the loop nestings, beginning at 0. 
+					This enables in an inner loop to access the current value of the outer one. 
+                    <br>
+                    In the C++ part we again use a dictionary, this time with a vector of strings. The vector length is responsible how often the element content will be repeated, while the elements of the vector are used to replace the loop accessor variables.  
+                    <br>
+                    <pre class="template">
+						<code>
+							**pangramlist<br>
+								##counter0##: ##value0##<br>
+							**/
+						</code>
+                    </pre>
+                    <pre class="code">
+						<code>
+							std::map&lt;std::string, std::vector &lt;std::string=""&gt; &gt; loop;
+							loop["pangramlist"] = std::vector<std::string>();
+							loop["pangramlist"].push_back("Sphinx of black quartz judge my vow.");
+							loop["pangramlist"].push_back("A quick movement of the enemy will jeopardize six gunboats");
+							loop["pangramlist"].push_back("Five quacking Zephyrs jolt my wax bed.");
+							loop["pangramlist"].push_back("Heavy boxes perform waltzes and jigs.");
+						</code>
+					</pre>
+                    <br>
+                    <br>
+                    <h3>If/Else:</h3>
+                    <br>
+                    If/Else for two different options of content:
+                    Hereby the user just defines "true" to use the first content, while at "false" the second one is used. For example the answer if "The quick brown fox jumps over the lazy dog" is a pangram should be "true".  
+                    <pre class="template">
+						<code>
+							&lt;&lt;isPangram
+									Yes, it is.
+								||<br>
+									No, it is not a pangram.
+							&lt;&lt;/
+						</code>
+					</pre>
+                    <pre class="code">
+						<code>
+							std::map&lt;std::string, bool&gt; ifElse;
+							ifElse["isPangram"] = true;
+						</code>   
+					</pre>
+                    <br>
+                    <br>
+                    <h3>Switch:</h3>
+                    Switch can be used for multiple options of different content - in the C++ part is defined which switch case will be used. In case the parser does not find a corresponding dictionary entry the default case will be used.
+
+                    <pre class="template">
+						<code>
+							&gt;&gt;pangram<br>
+								||first<br>
+									The five boxing wizards jump quickly.<br>
+								||second<br>
+									A quick movement of the enemy will jeopardize six gunboats.<br>
+								||third<br>
+									Sphinx of black quartz judge my vow.<br>
+								||fourth<br>
+									Five quacking Zephyrs jolt my wax bed.<br>
+								||default<br>
+									This is the default case which is chosen when nothing was set.<br>
+							&gt;&gt;/
+						</code>
+					</pre>
+                    <pre class="code">
+						<code>
+							std::map&lt;std::string, std::string=""&gt; swith;
+							swith["pangram"] = "first";
+						</code>     
+					</pre>
+                    <br>
+                    <br>
+                    <h3>Nesting:</h3>
+                    <br>
+                    Let's print every pangram three times, with one blank line in between. 
+					To do this we use the already before used vector "pangram" from the loop example. 
+					To repeat it three times we use a vector containing three elements - which elements does not matter since we do not use them 
+					(they would be access with <code>##value1##</code>, 1 for the inner loop).
+					In this case, the outer loop contains the pangrams, while the inner loop just repeats the current loop pangram three times.
+                    <br>
+                    <pre class="template">
+						<code>
+							**pangramlist
+
+								**empty
+									##value0##
+								**/
+
+								&lt;br&gt;
+							**/
+						</code>
+					</pre>
+
+                    <pre class="code">
+						<code>
+							loop["empty"] = std::vector&lt;std::string&gt;();
+							loop["empty"].push_back("");
+							loop["empty"].push_back("");
+							loop["empty"].push_back("");
+						</code>
+					</pre>
+                    <br>
+                    <br>
+                    <h3>File In/Output:</h3>
+                    Since now we have a template file and the C++ settings for the engine now we need to do the final setup, and specify file input and out. 
+                    <pre class="code">
+						<code>
+							SimpleTemp::Template html("pangrams.tmpl", true);
+							html.SetIfElseDictionary(ifElse);
+							html.SetLoopDictionary(loop);
+							html.SetSwitchDictionary(swith);
+							html.SetVariableDictionary(vars);
+							html.CreateFile("pangrams.html"); 
+						</code>
+                    </pre>            
+                </div>
+                <br>
+                <br>
+                        
+                <div id="Errors">
+                    The Simple Template Engine throws on errors occuring string exceptions. 
+                        </div>
+                        
+
+                <div id="Additional">
+                    <h2>Additional Resources:</h2> 
+                    You might need to use right click and save as...
+                    <br>
+                    <a href="./pangrams.tmpl" download="">The pangrams template file.</a>
+                    <br>
+                    <a href="./pangrams.html" download="">The output HTML file.</a>
+                    <br>
+                    <a href="./main.cpp" download="">The main.cpp for this example.</a>
+                </div>
+                <br>
+                <br>
+                <div id="Future">
+                    <h2>Ideas for Future Work:</h2>
+                    <ul>
+                        <li>Use more accessor vectors for a loop (pangram &amp; pangramcounter[first, second, third..].</li>
+                        <li>Support for boost::regex.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body></html>
